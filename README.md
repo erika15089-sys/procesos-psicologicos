@@ -1,0 +1,153 @@
+[juego_procesos_psicologicos.html](https://github.com/user-attachments/files/23976974/juego_procesos_psicologicos.html)
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Juego Interactivo – Procesos Psicológicos</title>
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:#0b1526;
+      color:#e8eef7;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+    .container{
+      width:900px;
+      background:#111a2c;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 0 20px rgba(0,0,0,.4);
+    }
+    h1{margin-top:0;text-align:center;color:#7de9c6;}
+    .question-box{margin-top:20px;padding:20px;background:#0d1728;border-radius:10px;}
+    .choices button{
+      width:100%;
+      padding:10px;
+      margin:6px 0;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      background:#1c2a40;
+      color:#e8eef7;
+      font-size:15px;
+      text-align:left;
+      transition:0.2s;
+    }
+    .choices button:hover{background:#243652;}
+    .correct{background:#1b523a !important;}
+    .incorrect{background:#6b1c1c !important;}
+    #nextBtn{
+      margin-top:20px;
+      padding:10px 16px;
+      background:#0e876d;
+      border:none;
+      color:white;
+      border-radius:8px;
+      cursor:pointer;
+      display:none;
+    }
+    #scoreBox{text-align:center;margin-top:15px;font-size:18px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Juego Interactivo: Procesos Psicológicos</h1>
+    <p style="text-align:center">Pon a prueba tus conocimientos sobre procesos psicológicos básicos y superiores.</p>
+
+    <div id="game">
+      <div class="question-box" id="questionBox"></div>
+      <div class="choices" id="choices"></div>
+      <button id="nextBtn">Siguiente</button>
+      <div id="scoreBox"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions=[
+      {
+        q:"¿Cuál de estos es un proceso psicológico básico?",
+        options:["Pensamiento","Lenguaje","Percepción","Inteligencia"],
+        answer:2
+      },
+      {
+        q:"La memoria se considera un proceso…",
+        options:["Sensorial únicamente","Superior porque implica manejo de información","Reflejo y automático","Basado solo en estímulos"],
+        answer:1
+      },
+      {
+        q:"El pensamiento permite…",
+        options:["Analizar, interpretar y resolver problemas","Registrar estímulos del ambiente","Obtener energía del entorno","Regular funciones fisiológicas"],
+        answer:0
+      },
+      {
+        q:"¿Qué proceso permite interpretar estímulos sensoriales?",
+        options:["Inteligencia","Memoria","Percepción","Creatividad"],
+        answer:2
+      },
+      {
+        q:"La creatividad es un proceso cognitivo superior porque…",
+        options:["Requiere inventar, transformar o producir ideas nuevas","Solo depende de los sentidos","Es un reflejo automático","No requiere aprendizaje previo"],
+        answer:0
+      }
+    ];
+
+    let index=0;
+    let score=0;
+
+    const questionBox=document.getElementById("questionBox");
+    const choicesBox=document.getElementById("choices");
+    const nextBtn=document.getElementById("nextBtn");
+    const scoreBox=document.getElementById("scoreBox");
+
+    function loadQuestion(){
+      const q=questions[index];
+      questionBox.innerHTML=`<h3>${q.q}</h3>`;
+      choicesBox.innerHTML="";
+      nextBtn.style.display="none";
+      q.options.forEach((opt,i)=>{
+        const btn=document.createElement("button");
+        btn.textContent=opt;
+        btn.onclick=()=>selectAnswer(i,btn);
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(i,btn){
+      const correctIndex=questions[index].answer;
+      const allButtons=document.querySelectorAll('.choices button');
+      allButtons.forEach(b=>b.disabled=true);
+
+      if(i===correctIndex){
+        btn.classList.add("correct");
+        score++;
+      }else{
+        btn.classList.add("incorrect");
+        allButtons[correctIndex].classList.add("correct");
+      }
+      nextBtn.style.display="block";
+    }
+
+    nextBtn.onclick=function(){
+      index++;
+      if(index<questions.length){
+        loadQuestion();
+      }else{
+        showScore();
+      }
+    }
+
+    function showScore(){
+      questionBox.innerHTML=`<h2>¡Juego finalizado!</h2>`;
+      choicesBox.innerHTML="";
+      nextBtn.style.display="none";
+      scoreBox.innerHTML=`Puntaje final: <strong>${score}/${questions.length}</strong>`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
